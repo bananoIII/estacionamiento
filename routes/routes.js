@@ -30,7 +30,7 @@ router.get('/api/get_all', async (req, res) => {
 
 
   // archivo: routes/lugares.js (agrega esto al final del archivo)
-router.put('/universidad/:uni/campus/:camp/seccion/:sec', async (req, res) => {
+router.post('/api/update', async (req, res) => {
     const { uni, camp, sec } = req.params;
     const { lugares } = req.body;
   
