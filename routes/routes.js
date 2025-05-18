@@ -44,27 +44,14 @@ router.post('/api/update', async (req, res) => {
       await client.query('BEGIN');
   
       // Buscar el ID de la sección correspondiente
-      const secQuery = `
-        SELECT lugares.id, lugares.numero
-        FROM lugares
-        JOIN secciones ON lugares.seccion_id = secciones.id
-        JOIN campus ON secciones.campus_id = campus.id
-        JOIN universidades ON campus.universidad_id = universidades.id
-        WHERE universidades.nombre = $1 AND campus.nombre = $2 AND secciones.nombre = $3
-      `;
-  
-      const { rows: existentes } = await client.query(secQuery, [uni, camp, sec]);
-  
-      const lugaresMap = new Map(existentes.map(l => [l.numero, l.id]));
+     
   
       for (const lugar of lugares) {
-        const lugarId = lugaresMap.get(lugar.numero);
-        if (lugarId) {
           await client.query(
             'UPDATE lugares SET ocupado = $1 WHERE id = $2',
-            [lugar.ocupado, lugarId]
+            [lugar.ocupado, lugar.id]
           );
-        }
+        
       }
   
       await client.query('COMMIT');
